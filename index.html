@@ -1,0 +1,1878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Máquina del Tiempo | Sesión 3: El Enigma de la Baraja Española</title>
+  <style>
+    :root {
+      --bg-desk: #23120b;
+      --wood-frame: #3a1e11;
+      --wood-border: #56301a;
+      --parchment-bg: #fdfaf3;
+      --parchment-card: #fbf5e8;
+      --parchment-border: #d8c39e;
+      --ink-primary: #29180d;
+      --ink-secondary: #5a3c26;
+      --ink-muted: #7b583f;
+      --gold-brass: #c59b27;
+      --gold-bright: #f5b700;
+      --gold-glow: rgba(245, 183, 0, 0.35);
+      --amber-warm: #d97706;
+      --crimson-royal: #9b2226;
+      --navy-steel: #1d3557;
+      --green-forest: #2d6a4f;
+      --paper-shadow: 0 4px 15px rgba(25, 12, 6, 0.25);
+      --font-main: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-serif: "Georgia", "Cambria", "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 12%, #422113 0%, #25120a 55%, #150904 100%);
+      color: var(--ink-primary);
+      font-family: var(--font-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient warm table grain */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(245, 183, 0, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER: Antique Chronometer & Time Machine Banner */
+    header.time-header {
+      background: linear-gradient(180deg, #3d2113 0%, #261309 100%);
+      border: 2px solid var(--gold-brass);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 235, 180, 0.3);
+      padding: 14px 22px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .header-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .astrolabe-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #f5d77f 0%, #c59b27 70%, #6e4e09 100%);
+      border: 2px solid #fff2a8;
+      box-shadow: 0 0 15px rgba(245, 183, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+    }
+
+    .header-titles h1 {
+      font-family: var(--font-serif);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #fff9ea;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 2px 4px rgba(0,0,0,0.8), 0 0 12px rgba(245, 183, 0, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-titles p {
+      font-size: 0.88rem;
+      color: #d8c2aa;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header-titles span.highlight-spain {
+      color: #f7cb59;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* Top Controls */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pocket-watch-timer {
+      background: #1a0c06;
+      border: 1.5px solid var(--gold-brass);
+      padding: 6px 14px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: monospace;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f5d77f;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.7), 0 0 10px rgba(197, 155, 39, 0.3);
+    }
+
+    .brass-btn {
+      background: linear-gradient(180deg, #4f2d1b 0%, #2d180d 100%);
+      border: 1.5px solid var(--gold-brass);
+      color: #fcefd2;
+      padding: 7px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+      transition: all 0.2s ease;
+    }
+
+    .brass-btn:hover {
+      background: linear-gradient(180deg, #663a22 0%, #3d2011 100%);
+      border-color: #ffd166;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Chrono-Energy Cylinder Gauge */
+    .energy-gauge-wrap {
+      background: linear-gradient(180deg, #2d170d 0%, #1e0e07 100%);
+      border: 2px solid var(--gold-brass);
+      border-radius: 12px;
+      padding: 10px 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .energy-gauge-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #dfcca8;
+      margin-bottom: 8px;
+    }
+
+    .energy-gauge-info span.val {
+      color: #f5b700;
+      font-size: 1rem;
+    }
+
+    .energy-track {
+      height: 16px;
+      background: #140803;
+      border-radius: 8px;
+      border: 1px solid #724c23;
+      overflow: hidden;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .energy-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #a44a14, #d97706, #f5b700, #55a630);
+      border-radius: 7px;
+      box-shadow: 0 0 12px rgba(245, 183, 0, 0.7);
+      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* 4 Suits Navigation: Warm Wooden/Parchment Cards */
+    .suits-shelf {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .suit-card-btn {
+      background: linear-gradient(180deg, #fffcf6 0%, #f7eee0 100%);
+      border: 2px solid var(--parchment-border);
+      border-radius: 14px;
+      padding: 14px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+
+    .suit-card-btn::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: transparent;
+      transition: background 0.25s ease;
+    }
+
+    .suit-card-btn.oros { --theme-color: #d49a00; }
+    .suit-card-btn.copas { --theme-color: #9b2226; }
+    .suit-card-btn.espadas { --theme-color: #1d3557; }
+    .suit-card-btn.bastos { --theme-color: #2d6a4f; }
+
+    .suit-card-btn:hover:not(.locked) {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.4), 0 0 12px rgba(245, 183, 0, 0.3);
+      border-color: var(--theme-color);
+    }
+
+    .suit-card-btn.active {
+      border-color: var(--theme-color);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.45), 0 0 15px var(--gold-glow);
+      background: #ffffff;
+      transform: translateY(-3px);
+    }
+
+    .suit-card-btn.active::before {
+      background: var(--theme-color);
+    }
+
+    .suit-card-btn.completed {
+      border-color: #38b000;
+      background: #fbfef7;
+    }
+
+    .suit-card-btn.completed::after {
+      content: "✓";
+      position: absolute;
+      top: 8px; right: 10px;
+      color: #38b000;
+      font-size: 1.25rem;
+      font-weight: 900;
+    }
+
+    .suit-card-btn.locked {
+      opacity: 0.55;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+      background: #e8ded1;
+    }
+
+    .mini-card-thumb {
+      width: 48px;
+      height: 74px;
+      border-radius: 4px;
+      border: 1px solid #c8b08b;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      object-fit: cover;
+      background: #fff;
+    }
+
+    .suit-name-title {
+      font-family: var(--font-serif);
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: var(--ink-primary);
+      letter-spacing: 0.3px;
+    }
+
+    .suit-badge-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .tag-activa {
+      background: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .tag-superada {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .tag-bloqueada {
+      background: #e2e3e5;
+      color: #383d41;
+      border: 1px solid #d6d8db;
+    }
+
+    /* MAIN VIEWPORT: WARM PARCHMENT DESK */
+    main.main-parchment-stage {
+      background: var(--parchment-bg);
+      border: 3px solid var(--parchment-border);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 0 30px rgba(212, 163, 115, 0.12);
+      padding: 26px;
+      position: relative;
+    }
+
+    /* SCREEN 0: WELCOME & BRIEFING */
+    .screen-briefing {
+      max-width: 840px;
+      margin: 15px auto;
+      text-align: center;
+      padding: 10px 20px;
+    }
+
+    .compass-scroll-badge {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 18px;
+      background: radial-gradient(circle, #f9ebb8 0%, #d4a373 65%, #8c531b 100%);
+      border-radius: 50%;
+      border: 3px solid #fffaeb;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      animation: gentleFloat 3s infinite ease-in-out alternate;
+    }
+
+    @keyframes gentleFloat {
+      from { transform: translateY(0); }
+      to { transform: translateY(-6px); }
+    }
+
+    .parchment-title {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--ink-primary);
+      margin-bottom: 14px;
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .parchment-desc {
+      font-size: 1.1rem;
+      line-height: 1.65;
+      color: var(--ink-secondary);
+      margin-bottom: 22px;
+    }
+
+    .scroll-note-box {
+      background: #fdf5e2;
+      border-left: 5px solid var(--amber-warm);
+      border-top: 1px solid #ebd7af;
+      border-right: 1px solid #ebd7af;
+      border-bottom: 1px solid #ebd7af;
+      border-radius: 0 10px 10px 0;
+      padding: 16px 20px;
+      text-align: left;
+      font-size: 1rem;
+      line-height: 1.55;
+      color: #4a2810;
+      margin: 22px 0 28px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    }
+
+    .team-input-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+
+    .team-input-group input {
+      background: #fff;
+      border: 2px solid #d4c2a5;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink-primary);
+      width: 320px;
+      text-align: center;
+      outline: none;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+    }
+
+    .team-input-group input:focus {
+      border-color: var(--gold-brass);
+    }
+
+    .btn-adventure-start {
+      background: linear-gradient(180deg, #d97706 0%, #b45309 100%);
+      color: #fff;
+      border: 2px solid #fef3c7;
+      padding: 14px 34px;
+      border-radius: 10px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(180, 83, 9, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-adventure-start:hover {
+      background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(180, 83, 9, 0.5);
+    }
+
+    /* MISSION STAGES: 2-COLUMN LAYOUT */
+    .mission-header-bar {
+      border-bottom: 2px solid #e8d7bd;
+      padding-bottom: 14px;
+      margin-bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .mission-headline h2 {
+      font-family: var(--font-serif);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--ink-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mission-headline p {
+      font-size: 0.92rem;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 26px;
+    }
+
+    /* Left: Story, Actual Cards & Math Clues */
+    .mission-left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .cards-story-mat {
+      background: #fdfaf3;
+      border: 1.5px solid #e2cfb2;
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .cards-display-rack {
+      display: flex;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .real-card-frame {
+      width: 78px;
+      height: 122px;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid #c2ad8c;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      object-fit: cover;
+      transition: transform 0.25s ease;
+      cursor: pointer;
+    }
+
+    .real-card-frame:hover {
+      transform: scale(1.08) rotate(1deg);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+    }
+
+    .story-mat-text {
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: var(--ink-primary);
+    }
+
+    .clues-parchment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .clue-parchment-tile {
+      background: #ffffff;
+      border: 1.5px solid #dccbb2;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .clue-parchment-tile:hover {
+      border-color: var(--gold-brass);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+    }
+
+    .clue-number-seal {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #d4a373, #8c531b);
+      color: #fff;
+      font-weight: 800;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .clue-tile-title {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 0.96rem;
+      color: var(--ink-primary);
+      margin-bottom: 6px;
+    }
+
+    .clue-tile-math {
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--ink-secondary);
+    }
+
+    .clue-tile-math strong {
+      color: var(--crimson-royal);
+    }
+
+    /* Hints Section (Post-it style) */
+    .parchment-hint-box {
+      background: #fff9e6;
+      border: 1.5px dashed #e6bb45;
+      border-radius: 10px;
+      padding: 12px 18px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .hint-trigger-btn {
+      background: none;
+      border: none;
+      color: #8c531b;
+      font-weight: 700;
+      font-size: 0.94rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hint-content-reveal {
+      margin-top: 10px;
+      display: none;
+      font-size: 0.9rem;
+      color: #5c3b12;
+      line-height: 1.55;
+      padding-top: 8px;
+      border-top: 1px solid #fae69e;
+    }
+
+    .hint-content-reveal.show {
+      display: block;
+    }
+
+    /* Right: Antique Combination Safe & Tactile Ivory Keypad */
+    .antique-safe-panel {
+      background: linear-gradient(180deg, #3d2315 0%, #24130a 100%);
+      border: 3px solid var(--gold-brass);
+      border-radius: 14px;
+      padding: 20px 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .safe-brass-plaque {
+      font-family: var(--font-serif);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #fcefd2;
+      background: #1c0e07;
+      border: 1px solid var(--gold-brass);
+      padding: 5px 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .safe-combination-slots {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .safe-slot-digit {
+      width: 50px;
+      height: 60px;
+      background: #150904;
+      border: 2px solid #8e6d24;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: #ffdf79;
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.9);
+      transition: all 0.2s ease;
+    }
+
+    .safe-slot-digit.filled {
+      border-color: #f5b700;
+      background: #2b170c;
+    }
+
+    .safe-slot-digit.error {
+      border-color: #d90429;
+      color: #d90429;
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .safe-slot-digit.success {
+      border-color: #38b000;
+      color: #38b000;
+      box-shadow: 0 0 12px rgba(56, 176, 0, 0.6);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* Keypad */
+    .safe-ivory-keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+      max-width: 250px;
+      margin-bottom: 16px;
+    }
+
+    .ivory-key {
+      background: linear-gradient(180deg, #fffcf6 0%, #eee3ce 100%);
+      border: 1.5px solid #a88434;
+      border-radius: 8px;
+      color: #2b170b;
+      font-size: 1.35rem;
+      font-weight: 800;
+      padding: 11px 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.5), inset 0 1px 0 #fff;
+      transition: all 0.15s ease;
+    }
+
+    .ivory-key:hover {
+      background: #fff;
+      border-color: #ffd166;
+      transform: translateY(-1px);
+    }
+
+    .ivory-key:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+
+    .ivory-key.action-clear {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #8c2518;
+    }
+
+    .ivory-key.action-check {
+      grid-column: span 3;
+      background: linear-gradient(180deg, #c59b27 0%, #8c6812 100%);
+      color: #fff;
+      font-size: 1.05rem;
+      border: 1.5px solid #ffe699;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+
+    .ivory-key.action-check:hover {
+      background: linear-gradient(180deg, #dbb037 0%, #a17818 100%);
+    }
+
+    .safe-status-label {
+      min-height: 24px;
+      font-size: 0.84rem;
+      text-align: center;
+      font-weight: 700;
+      color: #d8c2aa;
+    }
+
+    .safe-status-label.success { color: #55a630; }
+    .safe-status-label.error { color: #e63946; }
+
+    /* GRAND FINALE MODAL */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(18, 9, 4, 0.88);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .proclamation-parchment {
+      background: #fffcf4 linear-gradient(180deg, #fffef9 0%, #f7ecd9 100%);
+      border: 4px solid var(--gold-brass);
+      border-radius: 16px;
+      max-width: 760px;
+      width: 100%;
+      padding: 34px 28px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+      animation: popParchment 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popParchment {
+      from { transform: scale(0.88); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .proclamation-badge {
+      font-size: 3.5rem;
+      margin-bottom: 12px;
+    }
+
+    .proclamation-title {
+      font-family: var(--font-serif);
+      font-size: 2.15rem;
+      font-weight: 900;
+      color: var(--ink-primary);
+      margin-bottom: 10px;
+    }
+
+    .proclamation-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: var(--ink-secondary);
+      margin-bottom: 22px;
+    }
+
+    .codes-summary-ribbon {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .code-pill-tag {
+      background: #fdf5e2;
+      border: 1.5px solid #d4a373;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #3b200e;
+    }
+
+    .china-next-destination {
+      background: #fef8eb;
+      border: 2px solid #e0aa3e;
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-align: left;
+      margin-bottom: 22px;
+    }
+
+    .china-next-destination h4 {
+      font-family: var(--font-serif);
+      color: #8c531b;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .bitacora-task-note {
+      background: #ffffff;
+      border: 1px solid #dccbb2;
+      border-radius: 8px;
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #4a2810;
+      margin-bottom: 22px;
+    }
+
+    .bitacora-task-note strong {
+      color: #8c531b;
+    }
+
+    /* FOOTER */
+    footer.app-footer {
+      margin-top: 26px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 235, 180, 0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: #dfcca8;
+    }
+
+    .footer-teacher-actions button {
+      background: none;
+      border: none;
+      color: #f7cb59;
+      cursor: pointer;
+      text-decoration: underline;
+      font-size: 0.8rem;
+      margin-left: 14px;
+    }
+
+    .footer-teacher-actions button:hover {
+      color: #fff;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 880px) {
+      .mission-grid {
+        grid-template-columns: 1fr;
+      }
+      .clues-parchment-grid {
+        grid-template-columns: 1fr;
+      }
+      .suits-shelf {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .cards-story-mat {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- TOP HEADER: Antique Time Machine Chronometer -->
+    <header class="time-header">
+      <div class="header-badge-group">
+        <div class="astrolabe-icon">⌛</div>
+        <div class="header-titles">
+          <h1>LA MÁQUINA DEL TIEMPO <span>🧭</span></h1>
+          <p>SESIÓN 3: <span class="highlight-spain">ESPAÑA (SIGLO XVI) — LA BARAJA ESPAÑOLA</span> • CEIP INFANTA LEONOR</p>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <div class="pocket-watch-timer" id="timerDisplay">⏱️ 00:00</div>
+        <button class="brass-btn" id="btnTimerToggle" title="Pausar / Iniciar">⏸️</button>
+        <button class="brass-btn" id="btnSoundToggle" title="Activar / Silenciar Sonido">🔊</button>
+        <button class="brass-btn" id="btnFullscreen" title="Pantalla Completa">⛶</button>
+      </div>
+    </header>
+
+    <!-- CRONO-ENERGY GAUGE -->
+    <section class="energy-gauge-wrap">
+      <div class="energy-gauge-info">
+        <span>⚡ Energía del Salto Temporal</span>
+        <span>Condensador: <span class="val" id="energyPercent">0%</span></span>
+      </div>
+      <div class="energy-track">
+        <div class="energy-fill" id="energyFill"></div>
+      </div>
+    </section>
+
+    <!-- 4 SUITS SHELF -->
+    <nav class="suits-shelf" id="suitsNav" style="display: none;">
+      <!-- Oros -->
+      <div class="suit-card-btn oros active" data-suit="oros" id="tabOros">
+        <img class="mini-card-thumb" id="thumbOros" src="img/as_oros.png" alt="As de Oros">
+        <span class="suit-name-title">1. OROS</span>
+        <span class="suit-badge-tag tag-activa" id="tagOros">ACTIVA</span>
+      </div>
+
+      <!-- Copas -->
+      <div class="suit-card-btn copas locked" data-suit="copas" id="tabCopas">
+        <img class="mini-card-thumb" id="thumbCopas" src="img/as_copas.png" alt="As de Copas">
+        <span class="suit-name-title">2. COPAS</span>
+        <span class="suit-badge-tag tag-bloqueada" id="tagCopas">BLOQUEADA 🔒</span>
+      </div>
+
+      <!-- Espadas -->
+      <div class="suit-card-btn espadas locked" data-suit="espadas" id="tabEspadas">
+        <img class="mini-card-thumb" id="thumbEspadas" src="img/as_espadas.png" alt="As de Espadas">
+        <span class="suit-name-title">3. ESPADAS</span>
+        <span class="suit-badge-tag tag-bloqueada" id="tagEspadas">BLOQUEADA 🔒</span>
+      </div>
+
+      <!-- Bastos -->
+      <div class="suit-card-btn bastos locked" data-suit="bastos" id="tabBastos">
+        <img class="mini-card-thumb" id="thumbBastos" src="img/as_bastos.png" alt="As de Bastos">
+        <span class="suit-name-title">4. BASTOS</span>
+        <span class="suit-badge-tag tag-bloqueada" id="tagBastos">BLOQUEADA 🔒</span>
+      </div>
+    </nav>
+
+    <!-- MAIN PARCHMENT DESK STAGE -->
+    <main class="main-parchment-stage">
+
+      <!-- SCREEN 0: INTRO BRIEFING -->
+      <section class="screen-briefing" id="introScreen">
+        <div class="compass-scroll-badge">🧭</div>
+        <h2 class="parchment-title">¡LLEGADA A LA ESPAÑA DEL SIGLO XVI!</h2>
+        <p class="parchment-desc">
+          ¡Bienvenidos, exploradores matemáticos! Tras haber reparado el sistema de arranque y descubrir los enigmas del ajedrez en la India, nuestra <strong>Máquina del Tiempo</strong> nos ha transportado al corazón del Renacimiento español, la cuna de los naipes tradicionales de la <strong>Baraja Española</strong>.
+        </p>
+
+        <div class="scroll-note-box">
+          <strong>📜 MENSAJE DEL CRONÓMETRO:</strong> "Para abrir el portal hacia nuestro próximo destino (China), debemos calibrar la energía de los cuatro palos de la baraja: <strong>Oros, Copas, Espadas y Bastos</strong>. Cada palo encierra un enigma matemático. Al resolverlo con lápiz y papel en vuestra mesa, obtendréis una clave secreta de 4 dígitos para abrir la siguiente misión."
+        </div>
+
+        <div class="team-input-group">
+          <input type="text" id="teamNameInput" placeholder="Nombre de vuestro equipo (ej. Los Alquimistas)" maxlength="24">
+        </div>
+
+        <button class="btn-adventure-start" id="btnStartAdventure">
+          <span>🚀 ENTRAR A LA PRIMERA MISIÓN (LOS OROS)</span>
+        </button>
+      </section>
+
+      <!-- SCREEN 1: MISIÓN OROS -->
+      <section class="mission-view" id="panelOros" style="display: none;">
+        <div class="mission-header-bar">
+          <div class="mission-headline">
+            <h2>🪙 MISIÓN 1: EL TESORO DEL ORFEBRE DE TOLEDO</h2>
+            <p>Saberes matemáticos: Múltiplos, Divisores, Criterios de Divisibilidad y Números Primos</p>
+          </div>
+          <span class="suit-badge-tag tag-activa">DURACIÓN: ~10 MINUTOS</span>
+        </div>
+
+        <div class="mission-grid">
+          <div class="mission-left-col">
+            <div class="cards-story-mat">
+              <div class="cards-display-rack">
+                <img class="real-card-frame" id="cardOrosAs" src="img/as_oros.png" alt="As de Oros" title="As de Oros">
+                <img class="real-card-frame" id="cardOrosCuatro" src="img/cuatro_oros.png" alt="Cuatro de Oros" title="Cuatro de Oros">
+              </div>
+              <div class="story-mat-text">
+                El maestro orfebre custodia las monedas de oro de la corona en un cofre de latón. Para desbloquear el siguiente palo (Las Copas), calculad en vuestra libreta las <strong>4 cifras secretas</strong> a partir de las pistas numéricas del oro.
+              </div>
+            </div>
+
+            <div class="clues-parchment-grid">
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">1</div>
+                <div class="clue-tile-title">Primera Cifra (Millar)</div>
+                <div class="clue-tile-math">
+                  Es el único número natural que es a la vez <strong>par</strong> y <strong>número primo</strong>.
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">2</div>
+                <div class="clue-tile-title">Segunda Cifra (Centena)</div>
+                <div class="clue-tile-math">
+                  Es el <strong>mínimo común múltiplo (MCM)</strong> de 2 y 3.
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">3</div>
+                <div class="clue-tile-title">Tercera Cifra (Decena)</div>
+                <div class="clue-tile-math">
+                  Toma tres cartas de oros: el <strong>As (1)</strong>, el <strong>Tres (3)</strong> y el <strong>Cuatro (4)</strong>. Suma sus valores y <strong>divide el resultado entre 2</strong>.
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">4</div>
+                <div class="clue-tile-title">Cuarta Cifra (Unidad)</div>
+                <div class="clue-tile-math">
+                  ¿Cuántos números <strong>múltiplos de 3</strong> hay comprendidos entre el 1 y el 10?
+                </div>
+              </div>
+            </div>
+
+            <!-- Hints -->
+            <div class="parchment-hint-box">
+              <button class="hint-trigger-btn" onclick="toggleHint('hintOros')">
+                <span>💡 ¿Necesitáis una pista del maestro orfebre? (Pulsad aquí)</span>
+              </button>
+              <div class="hint-content-reveal" id="hintOros">
+                • <strong>Pista 1:</strong> Los primos solo tienen dos divisores (el 1 y ellos mismos). El 2 es el primer número primo y el único par.<br>
+                • <strong>Pista 2:</strong> Escribe la tabla del 2 (2, 4, 6...) y la del 3 (3, 6, 9...). ¿Cuál es el primer número común a las dos?<br>
+                • <strong>Pista 4:</strong> Los múltiplos de 3 menores o iguales a 10 son: 3, 6 y 9. ¡Cuenta cuántos son!
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Keypad Safe -->
+          <div class="antique-safe-panel">
+            <div class="safe-brass-plaque">CERRADURA DE OROS</div>
+            <div class="safe-combination-slots" id="displayOros">
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+            </div>
+            <div class="safe-ivory-keypad">
+              <button class="ivory-key" onclick="keyPress('oros', '1')">1</button>
+              <button class="ivory-key" onclick="keyPress('oros', '2')">2</button>
+              <button class="ivory-key" onclick="keyPress('oros', '3')">3</button>
+              <button class="ivory-key" onclick="keyPress('oros', '4')">4</button>
+              <button class="ivory-key" onclick="keyPress('oros', '5')">5</button>
+              <button class="ivory-key" onclick="keyPress('oros', '6')">6</button>
+              <button class="ivory-key" onclick="keyPress('oros', '7')">7</button>
+              <button class="ivory-key" onclick="keyPress('oros', '8')">8</button>
+              <button class="ivory-key" onclick="keyPress('oros', '9')">9</button>
+              <button class="ivory-key action-clear" onclick="keyClear('oros')">BORRAR</button>
+              <button class="ivory-key" onclick="keyPress('oros', '0')">0</button>
+              <button class="ivory-key action-clear" onclick="keyBackspace('oros')">⌫</button>
+              <button class="ivory-key action-check" onclick="checkCode('oros')">COMPROBAR CÓDIGO</button>
+            </div>
+            <div class="safe-status-label" id="statusOros">Introduce la clave de 4 cifras</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2: MISIÓN COPAS -->
+      <section class="mission-view" id="panelCopas" style="display: none;">
+        <div class="mission-header-bar">
+          <div class="mission-headline">
+            <h2>🍷 MISIÓN 2: EL BANQUETE DE LOS ALQUIMISTAS</h2>
+            <p>Saberes matemáticos: Fracción de una cantidad, Fracciones equivalentes y Repartos</p>
+          </div>
+          <span class="suit-badge-tag tag-activa">DURACIÓN: ~10 MINUTOS</span>
+        </div>
+
+        <div class="mission-grid">
+          <div class="mission-left-col">
+            <div class="cards-story-mat">
+              <div class="cards-display-rack">
+                <img class="real-card-frame" id="cardCopasAs" src="img/as_copas.png" alt="As de Copas" title="As de Copas">
+                <img class="real-card-frame" id="cardCopasCuatro" src="img/cuatro_copas.png" alt="Cuatro de Copas" title="Cuatro de Copas">
+              </div>
+              <div class="story-mat-text">
+                En las bodegas reales, los alquimistas preparan el elixir para calibrar el cronómetro. Cada copa contiene una medida fraccionaria exacta. Calculad en equipo cada valor para hallar la combinación que abrirá Las Espadas.
+              </div>
+            </div>
+
+            <div class="clues-parchment-grid">
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">1</div>
+                <div class="clue-tile-title">Primera Cifra (Millar)</div>
+                <div class="clue-tile-math">
+                  Un barril tiene <strong>40 litros</strong> de néctar. Para la copa real necesitamos llenar exactamente <strong>1/8 del barril</strong>. ¿Cuántos litros son?
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">2</div>
+                <div class="clue-tile-title">Segunda Cifra (Centena)</div>
+                <div class="clue-tile-math">
+                  En una bandeja hay <strong>36 copas</strong>. Si <strong>3/4</strong> de las copas están llenas, ¿cuántas copas están <strong>vacías</strong>?
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">3</div>
+                <div class="clue-tile-title">Tercera Cifra (Decena)</div>
+                <div class="clue-tile-math">
+                  Dos copas tienen fracciones equivalentes: <strong>2/5 = [ ? ] / 15</strong>. ¿Qué número va en el numerador incógnita [ ? ]?
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">4</div>
+                <div class="clue-tile-title">Cuarta Cifra (Unidad)</div>
+                <div class="clue-tile-math">
+                  En la mesa real hay <strong>28 copas</strong> de cristal. Si exactamente <strong>2/7</strong> son de cristal rubí, ¿cuántas copas de rubí hay?
+                </div>
+              </div>
+            </div>
+
+            <div class="parchment-hint-box">
+              <button class="hint-trigger-btn" onclick="toggleHint('hintCopas')">
+                <span>💡 ¿Necesitáis una pista del maestro alquimista? (Pulsad aquí)</span>
+              </button>
+              <div class="hint-content-reveal" id="hintCopas">
+                • <strong>Pista 1:</strong> Para calcular 1/8 de 40: divide 40 entre 8.<br>
+                • <strong>Pista 2:</strong> ¡Atención a la pregunta! Te piden las copas VACÍAS. Si 3/4 están llenas, 1/4 están vacías: 36 dividido entre 4.<br>
+                • <strong>Pista 3:</strong> En fracciones equivalentes: el 5 se multiplica por 3 para dar 15. Haz lo mismo con el numerador: 2 × 3.<br>
+                • <strong>Pista 4:</strong> Para calcular 2/7 de 28: divide 28 entre 7 y luego multiplica el resultado por 2.
+              </div>
+            </div>
+          </div>
+
+          <div class="antique-safe-panel">
+            <div class="safe-brass-plaque">CERRADURA DE COPAS</div>
+            <div class="safe-combination-slots" id="displayCopas">
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+            </div>
+            <div class="safe-ivory-keypad">
+              <button class="ivory-key" onclick="keyPress('copas', '1')">1</button>
+              <button class="ivory-key" onclick="keyPress('copas', '2')">2</button>
+              <button class="ivory-key" onclick="keyPress('copas', '3')">3</button>
+              <button class="ivory-key" onclick="keyPress('copas', '4')">4</button>
+              <button class="ivory-key" onclick="keyPress('copas', '5')">5</button>
+              <button class="ivory-key" onclick="keyPress('copas', '6')">6</button>
+              <button class="ivory-key" onclick="keyPress('copas', '7')">7</button>
+              <button class="ivory-key" onclick="keyPress('copas', '8')">8</button>
+              <button class="ivory-key" onclick="keyPress('copas', '9')">9</button>
+              <button class="ivory-key action-clear" onclick="keyClear('copas')">BORRAR</button>
+              <button class="ivory-key" onclick="keyPress('copas', '0')">0</button>
+              <button class="ivory-key action-clear" onclick="keyBackspace('copas')">⌫</button>
+              <button class="ivory-key action-check" onclick="checkCode('copas')">COMPROBAR CÓDIGO</button>
+            </div>
+            <div class="safe-status-label" id="statusCopas">Introduce la clave de 4 cifras</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 3: MISIÓN ESPADAS -->
+      <section class="mission-view" id="panelEspadas" style="display: none;">
+        <div class="mission-header-bar">
+          <div class="mission-headline">
+            <h2>⚔️ MISIÓN 3: EL DUELO DE LA JERARQUÍA DE OPERACIONES</h2>
+            <p>Saberes matemáticos: Sentido de las operaciones, Paréntesis y Prioridad de cálculo</p>
+          </div>
+          <span class="suit-badge-tag tag-activa">DURACIÓN: ~10 MINUTOS</span>
+        </div>
+
+        <div class="mission-grid">
+          <div class="mission-left-col">
+            <div class="cards-story-mat">
+              <div class="cards-display-rack">
+                <img class="real-card-frame" id="cardEspadasAs" src="img/as_espadas.png" alt="As de Espadas" title="As de Espadas">
+                <img class="real-card-frame" id="cardEspadasCuatro" src="img/cuatro_espadas.png" alt="Cuatro de Espadas" title="Cuatro de Espadas">
+              </div>
+              <div class="story-mat-text">
+                Los maestros de esgrima han cruzado sus hojas de acero toledano. Para desarmar el cerrojo de espadas, debéis calcular con precisión cuatro estocadas matemáticas respetando siempre la <strong>jerarquía de las operaciones</strong>.
+              </div>
+            </div>
+
+            <div class="clues-parchment-grid">
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">1</div>
+                <div class="clue-tile-title">Primera Estocada (Millar)</div>
+                <div class="clue-tile-math">
+                  Resuelve respetando la jerarquía:<br>
+                  <strong style="font-size: 1.15rem; display: block; margin-top: 5px;">15 − 2 × (10 − 6)</strong>
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">2</div>
+                <div class="clue-tile-title">Segunda Estocada (Centena)</div>
+                <div class="clue-tile-math">
+                  Resuelve la operación combinada:<br>
+                  <strong style="font-size: 1.15rem; display: block; margin-top: 5px;">(4 + 8) ÷ 6 + 1</strong>
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">3</div>
+                <div class="clue-tile-title">Tercera Estocada (Decena)</div>
+                <div class="clue-tile-math">
+                  ¡Cuidado con operar de izquierda a derecha!<br>
+                  <strong style="font-size: 1.15rem; display: block; margin-top: 5px;">20 − 3 × 5</strong>
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">4</div>
+                <div class="clue-tile-title">Cuarta Estocada (Unidad)</div>
+                <div class="clue-tile-math">
+                  Resuelve el duelo final:<br>
+                  <strong style="font-size: 1.15rem; display: block; margin-top: 5px;">2 × (3 + 1) − 6</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="parchment-hint-box">
+              <button class="hint-trigger-btn" onclick="toggleHint('hintEspadas')">
+                <span>💡 ¿Necesitáis una pista del maestro de armas? (Pulsad aquí)</span>
+              </button>
+              <div class="hint-content-reveal" id="hintEspadas">
+                • <strong>Regla de oro:</strong> 1.º Paréntesis ( ), 2.º Multiplicaciones y Divisiones (×, ÷), 3.º Sumas y Restas (+, −).<br>
+                • <strong>Pista 1:</strong> Primero calcula el paréntesis: 10 − 6 = 4. Luego multiplica: 2 × 4 = 8. Al final resta: 15 − 8.<br>
+                • <strong>Pista 3:</strong> ¡No hagas 20 − 3! Primero multiplica 3 × 5 = 15, y luego réstalo a 20.
+              </div>
+            </div>
+          </div>
+
+          <div class="antique-safe-panel">
+            <div class="safe-brass-plaque">CERRADURA DE ESPADAS</div>
+            <div class="safe-combination-slots" id="displayEspadas">
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+            </div>
+            <div class="safe-ivory-keypad">
+              <button class="ivory-key" onclick="keyPress('espadas', '1')">1</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '2')">2</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '3')">3</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '4')">4</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '5')">5</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '6')">6</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '7')">7</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '8')">8</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '9')">9</button>
+              <button class="ivory-key action-clear" onclick="keyClear('espadas')">BORRAR</button>
+              <button class="ivory-key" onclick="keyPress('espadas', '0')">0</button>
+              <button class="ivory-key action-clear" onclick="keyBackspace('espadas')">⌫</button>
+              <button class="ivory-key action-check" onclick="checkCode('espadas')">COMPROBAR CÓDIGO</button>
+            </div>
+            <div class="safe-status-label" id="statusEspadas">Introduce la clave de 4 cifras</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN 4: MISIÓN BASTOS -->
+      <section class="mission-view" id="panelBastos" style="display: none;">
+        <div class="mission-header-bar">
+          <div class="mission-headline">
+            <h2>🪵 MISIÓN 4: LOS ENGRANAJES DE LOS PATRONES NUMÉRICOS</h2>
+            <p>Saberes matemáticos: Sentido algebraico, Series lógicas y Regularidades</p>
+          </div>
+          <span class="suit-badge-tag tag-activa">DURACIÓN: ~10 MINUTOS</span>
+        </div>
+
+        <div class="mission-grid">
+          <div class="mission-left-col">
+            <div class="cards-story-mat">
+              <div class="cards-display-rack">
+                <img class="real-card-frame" id="cardBastosAs" src="img/as_bastos.png" alt="As de Bastos" title="As de Bastos">
+                <img class="real-card-frame" id="cardBastosDos" src="img/dos_bastos.png" alt="Dos de Bastos" title="Dos de Bastos">
+              </div>
+              <div class="story-mat-text">
+                ¡El último desafío! Los cuatro bastos sagrados actúan como manivelas del rotor de la máquina del tiempo. Para activar el salto a China, encontrad la regla lógica oculta en cada serie numérica.
+              </div>
+            </div>
+
+            <div class="clues-parchment-grid">
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">1</div>
+                <div class="clue-tile-title">Primera Cifra (Millar)</div>
+                <div class="clue-tile-math">
+                  Observa la serie: <strong>2 − 4 − 8 − 16 − [ ? ]</strong><br>
+                  Averigua el número que sigue y <strong>suma sus dos cifras</strong> para obtener esta clave.
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">2</div>
+                <div class="clue-tile-title">Segunda Cifra (Centena)</div>
+                <div class="clue-tile-math">
+                  Observa la serie: <strong>7 − 12 − 17 − 22 − [ ? ]</strong><br>
+                  Descubre el número que falta. La <strong>cifra de las unidades</strong> de ese número es tu clave.
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">3</div>
+                <div class="clue-tile-title">Tercera Cifra (Decena)</div>
+                <div class="clue-tile-math">
+                  Observa la serie decreciente: <strong>60 − 52 − 44 − 36 − [ ? ]</strong><br>
+                  Halla el número que falta y <strong>divídelo entre 7</strong> para obtener esta cifra.
+                </div>
+              </div>
+
+              <div class="clue-parchment-tile">
+                <div class="clue-number-seal">4</div>
+                <div class="clue-tile-title">Cuarta Cifra (Unidad)</div>
+                <div class="clue-tile-math">
+                  Observa los saltos: <strong>1 − 2 − 4 − 7 − 11 − [ ? ]</strong><br>
+                  ¿Qué <strong>número se le suma al 11</strong> para hallar el siguiente término de la serie?
+                </div>
+              </div>
+            </div>
+
+            <div class="parchment-hint-box">
+              <button class="hint-trigger-btn" onclick="toggleHint('hintBastos')">
+                <span>💡 ¿Necesitáis una pista del maestro de los patrones? (Pulsad aquí)</span>
+              </button>
+              <div class="hint-content-reveal" id="hintBastos">
+                • <strong>Pista 1:</strong> Cada número es el doble del anterior (se multiplica por 2). El siguiente a 16 es 32. Suma sus cifras: 3 + 2.<br>
+                • <strong>Pista 2:</strong> En cada salto se suma 5. 22 + 5 = 27. La cifra de las unidades es el 7.<br>
+                • <strong>Pista 3:</strong> En cada salto se resta 8. A 36 le restas 8 y da 28. Luego divide: 28 ÷ 7.<br>
+                • <strong>Pista 4:</strong> Observa la progresión de los saltos: +1, +2, +3, +4... ¿cuánto toca sumar después del 11?
+              </div>
+            </div>
+          </div>
+
+          <div class="antique-safe-panel">
+            <div class="safe-brass-plaque">CERRADURA DE BASTOS</div>
+            <div class="safe-combination-slots" id="displayBastos">
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+              <div class="safe-slot-digit">_</div>
+            </div>
+            <div class="safe-ivory-keypad">
+              <button class="ivory-key" onclick="keyPress('bastos', '1')">1</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '2')">2</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '3')">3</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '4')">4</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '5')">5</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '6')">6</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '7')">7</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '8')">8</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '9')">9</button>
+              <button class="ivory-key action-clear" onclick="keyClear('bastos')">BORRAR</button>
+              <button class="ivory-key" onclick="keyPress('bastos', '0')">0</button>
+              <button class="ivory-key action-clear" onclick="keyBackspace('bastos')">⌫</button>
+              <button class="ivory-key action-check" onclick="checkCode('bastos')">COMPROBAR CÓDIGO</button>
+            </div>
+            <div class="safe-status-label" id="statusBastos">Introduce la clave de 4 cifras</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER WITH TEACHER CONTROLS -->
+    <footer class="app-footer">
+      <div>Centro Aula del Futuro — CEIP Infanta Leonor (Mazarrón) | Matemáticas 3.er Ciclo</div>
+      <div class="footer-teacher-actions">
+        <button onclick="teacherUnlockAll()" title="Desbloquear todas las misiones para la PDI">Modo Docente: Desbloquear todo</button>
+        <button onclick="teacherResetAll()" title="Reiniciar sesión">Reiniciar sesión</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- VICTORY MODAL PROCLAMATION -->
+  <div class="modal-backdrop" id="victoryModal">
+    <div class="proclamation-parchment">
+      <div class="proclamation-badge">✨📜✨</div>
+      <h2 class="proclamation-title">¡PORTAL TEMPORAL RESTABLECIDO!</h2>
+      <p class="proclamation-text">
+        ¡Enhorabuena, equipo <span id="finalTeamName" style="color: #b45309; font-weight: bold;">Exploradores</span>! Habéis descifrado los cuatro enigmas de la Baraja Española y el condensador de crono-energía ha alcanzado el 100%.
+      </p>
+
+      <div class="codes-summary-ribbon">
+        <span class="code-pill-tag">🪙 OROS: 2643 ✓</span>
+        <span class="code-pill-tag">🍷 COPAS: 5968 ✓</span>
+        <span class="code-pill-tag">⚔️ ESPADAS: 7352 ✓</span>
+        <span class="code-pill-tag">🪵 BASTOS: 5745 ✓</span>
+      </div>
+
+      <div class="china-next-destination">
+        <h4>🌏 TRANSMISIÓN FINAL DE LA MÁQUINA DEL TIEMPO:</h4>
+        <p style="font-size: 0.98rem; line-height: 1.55; color: #29180d;">
+          <strong>"Código de viaje sincronizado. Siguiente destino localizado: CHINA (Año 1120 d.C.)."</strong><br>
+          <em>«Para continuar el viaje en la Sesión 4 necesitaréis descubrir cómo funciona el dominó. Pero esta vez las fichas esconderán algo más que puntos...»</em>
+        </p>
+      </div>
+
+      <div class="bitacora-task-note">
+        <strong>📝 TAREA PARA EL CUADERNO DE BITÁCORA (Google Drive / Libreta):</strong><br>
+        1. Anotad los 4 códigos conseguidos por vuestro equipo.<br>
+        2. ¿Qué reto os ha costado más esfuerzo resolver en equipo?<br>
+        3. Explicad una estrategia matemática que os haya servido de ayuda hoy.
+      </div>
+
+      <button class="btn-adventure-start" onclick="closeVictoryModal()">
+        <span>VOLVER A LA MÁQUINA DEL TIEMPO</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- External Base64 fallback library -->
+  <script src="img/cards_base64.js"></script>
+
+  <script>
+    // Sound engine with warm vintage chime & click tones
+    class VintageAudio {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+      }
+      beep(freq, duration = 0.08, type = 'sine', vol = 0.12) {
+        if (this.muted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      }
+      playClick() {
+        this.beep(650, 0.05, 'triangle', 0.15);
+      }
+      playSuccess() {
+        if (this.muted || !this.ctx) return;
+        // Warm bell chord (Do, Mi, Sol, Do')
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          setTimeout(() => this.beep(freq, 0.22, 'sine', 0.14), idx * 90);
+        });
+      }
+      playError() {
+        if (this.muted || !this.ctx) return;
+        this.beep(220, 0.28, 'sawtooth', 0.1);
+      }
+      playFanfare() {
+        if (this.muted || !this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1046.50, 1318.51];
+        const times = [0, 140, 280, 420, 600, 800];
+        notes.forEach((f, i) => {
+          setTimeout(() => this.beep(f, 0.35, 'triangle', 0.16), times[i]);
+        });
+      }
+    }
+
+    const audio = new VintageAudio();
+
+    // Setup images with error handling & base64 fallback
+    function setupCardImages() {
+      const mapping = {
+        thumbOros: 'as_oros',
+        thumbCopas: 'as_copas',
+        thumbEspadas: 'as_espadas',
+        thumbBastos: 'as_bastos',
+        cardOrosAs: 'as_oros',
+        cardOrosCuatro: 'cuatro_oros',
+        cardCopasAs: 'as_copas',
+        cardCopasCuatro: 'cuatro_copas',
+        cardEspadasAs: 'as_espadas',
+        cardEspadasCuatro: 'cuatro_espadas',
+        cardBastosAs: 'as_bastos',
+        cardBastosDos: 'dos_bastos'
+      };
+
+      for (const [id, key] of Object.entries(mapping)) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.onerror = () => {
+            if (typeof CARD_IMAGES !== 'undefined' && CARD_IMAGES[key]) {
+              el.src = CARD_IMAGES[key];
+            }
+          };
+          if (!el.src || el.src === window.location.href) {
+            if (typeof CARD_IMAGES !== 'undefined' && CARD_IMAGES[key]) {
+              el.src = CARD_IMAGES[key];
+            }
+          }
+        }
+      }
+    }
+
+    // Solutions
+    const SOLUTIONS = {
+      oros: "2643",
+      copas: "5968",
+      espadas: "7352",
+      bastos: "5745"
+    };
+
+    // State
+    const state = {
+      teamName: "Exploradores",
+      timerSeconds: 0,
+      timerRunning: false,
+      timerInterval: null,
+      currentSuit: "oros",
+      unlocked: {
+        oros: true,
+        copas: false,
+        espadas: false,
+        bastos: false
+      },
+      completed: {
+        oros: false,
+        copas: false,
+        espadas: false,
+        bastos: false
+      },
+      inputs: {
+        oros: "",
+        copas: "",
+        espadas: "",
+        bastos: ""
+      }
+    };
+
+    // DOM Elements
+    const introScreen = document.getElementById("introScreen");
+    const suitsNav = document.getElementById("suitsNav");
+    const teamNameInput = document.getElementById("teamNameInput");
+    const btnStartAdventure = document.getElementById("btnStartAdventure");
+    const energyPercent = document.getElementById("energyPercent");
+    const energyFill = document.getElementById("energyFill");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const btnTimerToggle = document.getElementById("btnTimerToggle");
+    const btnSoundToggle = document.getElementById("btnSoundToggle");
+    const btnFullscreen = document.getElementById("btnFullscreen");
+    const victoryModal = document.getElementById("victoryModal");
+    const finalTeamName = document.getElementById("finalTeamName");
+
+    // Init Event Listeners
+    window.addEventListener("DOMContentLoaded", () => {
+      setupCardImages();
+    });
+
+    btnStartAdventure.addEventListener("click", () => {
+      audio.init();
+      audio.playClick();
+      const name = teamNameInput.value.trim();
+      if (name) state.teamName = name;
+      finalTeamName.textContent = state.teamName;
+
+      introScreen.style.display = "none";
+      suitsNav.style.display = "grid";
+      showSuit("oros");
+      startTimer();
+    });
+
+    btnSoundToggle.addEventListener("click", () => {
+      audio.init();
+      audio.muted = !audio.muted;
+      btnSoundToggle.textContent = audio.muted ? "🔇" : "🔊";
+    });
+
+    btnTimerToggle.addEventListener("click", () => {
+      if (state.timerRunning) {
+        pauseTimer();
+        btnTimerToggle.textContent = "▶️";
+      } else {
+        startTimer();
+        btnTimerToggle.textContent = "⏸️";
+      }
+    });
+
+    btnFullscreen.addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    // Suit tab navigation
+    document.querySelectorAll(".suit-card-btn").forEach(tab => {
+      tab.addEventListener("click", () => {
+        const suit = tab.getAttribute("data-suit");
+        if (state.unlocked[suit]) {
+          audio.init();
+          audio.playClick();
+          showSuit(suit);
+        } else {
+          audio.init();
+          audio.playError();
+          flashLockedSuit(suit);
+        }
+      });
+    });
+
+    // Keyboard support
+    window.addEventListener("keydown", (e) => {
+      if (!suitsNav || suitsNav.style.display === "none") return;
+      const activeSuit = state.currentSuit;
+      if (!activeSuit) return;
+
+      if (e.key >= '0' && e.key <= '9') {
+        keyPress(activeSuit, e.key);
+      } else if (e.key === 'Backspace') {
+        keyBackspace(activeSuit);
+      } else if (e.key === 'Enter') {
+        checkCode(activeSuit);
+      } else if (e.key === 'Escape') {
+        keyClear(activeSuit);
+      }
+    });
+
+    function showSuit(suit) {
+      state.currentSuit = suit;
+
+      document.querySelectorAll(".suit-card-btn").forEach(t => t.classList.remove("active"));
+      const activeTab = document.getElementById(`tab${capitalize(suit)}`);
+      if (activeTab) activeTab.classList.add("active");
+
+      ["oros", "copas", "espadas", "bastos"].forEach(s => {
+        const p = document.getElementById(`panel${capitalize(s)}`);
+        if (p) p.style.display = (s === suit) ? "block" : "none";
+      });
+
+      updateDisplay(suit);
+    }
+
+    function flashLockedSuit(suit) {
+      const tab = document.getElementById(`tab${capitalize(suit)}`);
+      if (tab) {
+        tab.style.transform = "scale(0.96)";
+        tab.style.borderColor = "#d90429";
+        setTimeout(() => {
+          tab.style.transform = "";
+          tab.style.borderColor = "";
+        }, 300);
+      }
+    }
+
+    // Keypad Functions
+    function keyPress(suit, num) {
+      audio.init();
+      audio.playClick();
+      if (state.inputs[suit].length < 4) {
+        state.inputs[suit] += num;
+        updateDisplay(suit);
+      }
+    }
+
+    function keyBackspace(suit) {
+      audio.init();
+      audio.playClick();
+      state.inputs[suit] = state.inputs[suit].slice(0, -1);
+      updateDisplay(suit);
+    }
+
+    function keyClear(suit) {
+      audio.init();
+      audio.playClick();
+      state.inputs[suit] = "";
+      updateDisplay(suit);
+    }
+
+    function updateDisplay(suit) {
+      const display = document.getElementById(`display${capitalize(suit)}`);
+      if (!display) return;
+      const slots = display.querySelectorAll(".safe-slot-digit");
+      const code = state.inputs[suit];
+
+      slots.forEach((slot, index) => {
+        if (index < code.length) {
+          slot.textContent = code[index];
+          slot.classList.add("filled");
+        } else {
+          slot.textContent = "_";
+          slot.classList.remove("filled", "error", "success");
+        }
+      });
+    }
+
+    function checkCode(suit) {
+      audio.init();
+      const entered = state.inputs[suit];
+      const correct = SOLUTIONS[suit];
+      const statusEl = document.getElementById(`status${capitalize(suit)}`);
+      const displayEl = document.getElementById(`display${capitalize(suit)}`);
+      const slots = displayEl.querySelectorAll(".safe-slot-digit");
+
+      if (entered.length < 4) {
+        audio.playError();
+        statusEl.className = "safe-status-label error";
+        statusEl.textContent = "Introduce las 4 cifras antes de comprobar.";
+        return;
+      }
+
+      if (entered === correct) {
+        audio.playSuccess();
+        state.completed[suit] = true;
+        statusEl.className = "safe-status-label success";
+        statusEl.textContent = "¡CÓDIGO CORRECTO! Cerradura abierta ✓";
+        slots.forEach(s => s.classList.add("success"));
+
+        const tag = document.getElementById(`tag${capitalize(suit)}`);
+        if (tag) {
+          tag.className = "suit-badge-tag tag-superada";
+          tag.textContent = "SUPERADA ✓";
+        }
+        const tab = document.getElementById(`tab${capitalize(suit)}`);
+        if (tab) tab.classList.add("completed");
+
+        handleNextSuitUnlock(suit);
+        updateProgress();
+
+      } else {
+        audio.playError();
+        statusEl.className = "safe-status-label error";
+        statusEl.textContent = "CÓDIGO INCORRECTO. Revisad los cálculos en papel.";
+        slots.forEach(s => s.classList.add("error"));
+        setTimeout(() => {
+          slots.forEach(s => s.classList.remove("error"));
+        }, 500);
+      }
+    }
+
+    function handleNextSuitUnlock(current) {
+      const flow = {
+        oros: "copas",
+        copas: "espadas",
+        espadas: "bastos",
+        bastos: null
+      };
+
+      const next = flow[current];
+      if (next) {
+        state.unlocked[next] = true;
+        const nextTab = document.getElementById(`tab${capitalize(next)}`);
+        if (nextTab) {
+          nextTab.classList.remove("locked");
+          const nextTag = document.getElementById(`tag${capitalize(next)}`);
+          if (nextTag) {
+            nextTag.className = "suit-badge-tag tag-activa";
+            nextTag.textContent = "ACTIVA";
+          }
+        }
+        setTimeout(() => {
+          showSuit(next);
+        }, 1300);
+      } else {
+        setTimeout(() => {
+          audio.playFanfare();
+          victoryModal.classList.add("active");
+        }, 700);
+      }
+    }
+
+    function updateProgress() {
+      const suits = ["oros", "copas", "espadas", "bastos"];
+      const total = suits.length;
+      const count = suits.filter(s => state.completed[s]).length;
+      const pct = Math.round((count / total) * 100);
+
+      energyPercent.textContent = `${pct}%`;
+      energyFill.style.width = `${pct}%`;
+    }
+
+    function toggleHint(hintId) {
+      audio.init();
+      audio.playClick();
+      const el = document.getElementById(hintId);
+      if (el) el.classList.toggle("show");
+    }
+
+    function closeVictoryModal() {
+      victoryModal.classList.remove("active");
+    }
+
+    function startTimer() {
+      if (state.timerRunning) return;
+      state.timerRunning = true;
+      state.timerInterval = setInterval(() => {
+        state.timerSeconds++;
+        const mins = String(Math.floor(state.timerSeconds / 60)).padStart(2, '0');
+        const secs = String(state.timerSeconds % 60).padStart(2, '0');
+        timerDisplay.textContent = `⏱️ ${mins}:${secs}`;
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      state.timerRunning = false;
+      clearInterval(state.timerInterval);
+    }
+
+    function teacherUnlockAll() {
+      ["oros", "copas", "espadas", "bastos"].forEach(s => {
+        state.unlocked[s] = true;
+        const tab = document.getElementById(`tab${capitalize(s)}`);
+        if (tab) tab.classList.remove("locked");
+        const tag = document.getElementById(`tag${capitalize(s)}`);
+        if (tag && !state.completed[s]) {
+          tag.className = "suit-badge-tag tag-activa";
+          tag.textContent = "ACTIVA";
+        }
+      });
+      alert("Modo Docente: Todas las misiones han sido desbloqueadas para la PDI.");
+    }
+
+    function teacherResetAll() {
+      if (!confirm("¿Deseas reiniciar toda la sesión de la máquina del tiempo?")) return;
+      location.reload();
+    }
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  </script>
+</body>
+</html>
